@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MdShoppingBasket } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 
@@ -10,9 +11,11 @@ export function Header(){
     <div className={styles.container}>
      
       <div>
-        <h3>Liven-Store</h3>
+        <Link to="/" className={styles.logo}>
+          <h3>Liven-Store</h3>
+        </Link>
       </div>
-      <div className={styles.cart}>
+      <Link className={styles.cart} to={'/cart'}>
         <div>
           <strong>Meu carrinho</strong>
           <span data-testid="cart-size">
@@ -20,7 +23,7 @@ export function Header(){
           </span>
         </div>
         <MdShoppingBasket size={36} color="#FFF" />
-      </div>
+      </Link>
     </div>
   );
 }
