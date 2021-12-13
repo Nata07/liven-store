@@ -1,53 +1,58 @@
 import { useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdRemoveCircleOutline } from "react-icons/md";
 import { Header } from "../../components/Header";
+import { useCart } from "../../hook/useCart";
 
 interface Product {
-  id: string;
+  id: number;
   createdAt: string;
   name:  string;
-  price: string;
+  price: number;
   image: string;
   stock: number;
+  amount: number;
 }
 
 import styles from './styles.module.scss';
 
+
 export function Cart() {
 
-  const [cartFormatted, setCartFormatted] = useState<Product[]>([]);
+  const { format: formatPrice } = new Intl.NumberFormat('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  });
 
+  const { cart, removeProduct, updateProductAmount } = useCart();
 
-  useEffect(() => {
-    const produto = [
-      {
-        id: "1",
-        createdAt: "2019-09-02T12:58:54.103Z",
-        name: "Rustic Metal Fish",
-        price: "289.00",
-        image: "http://lorempixel.com/640/480/food",
-        stock: 65171
-      },
-      {
-        id: "1",
-        createdAt: "2019-09-02T12:58:54.103Z",
-        name: "Rustic Metal Fish",
-        price: "289.00",
-        image: "http://lorempixel.com/640/480/food",
-        stock: 65171
-      },
-      {
-        id: "1",
-        createdAt: "2019-09-02T12:58:54.103Z",
-        name: "Rustic Metal Fish",
-        price: "289.00",
-        image: "http://lorempixel.com/640/480/food",
-        stock: 65171
-      },
-    ]
+  const cartFormatted = cart.map(product => ({
+    ...product,
+    priceFormated: formatPrice(product.price),
+    priceTotal: formatPrice(product.amount * product.price)
+  }))
 
-    setCartFormatted(produto);
-  })
+  const total =
+    formatPrice(
+      cart.reduce((sumTotal, product) => {
+        sumTotal += (product.price * product.amount)
+
+        return sumTotal;
+      }, 0)
+    )
+
+    function handleRemoveProduct(productId: number) {
+      removeProduct(productId)
+    }
+     function handleProductIncrement(product: Product) {
+    updateProductAmount({productId: product.id, amount: product.amount + 1})
+  }
+
+  function handleProductDecrement(product: Product) {
+    updateProductAmount({productId: product.id, amount: product.amount - 1})
+  }
+
+  
+  
   return (
     <>
     <Header />
@@ -78,7 +83,7 @@ export function Cart() {
                     type="button"
                     data-testid="decrement-product"
                   disabled={product.stock <= 1}
-                  onClick={() => handleProductIncrement(product)}
+                  onClick={() => handleProductDecrement(product)}
                   >
                     <MdRemoveCircleOutline size={20} />
                   </button>
@@ -86,7 +91,7 @@ export function Cart() {
                     type="text"
                     data-testid="product-amount"
                     readOnly
-                    value={product.stock}
+                    value={product.amount}
                   />
                   <button
                     type="button"
@@ -119,18 +124,11 @@ export function Cart() {
 
         <div className={styles.total}>
           <span>TOTAL</span>
-          <strong>{100}</strong>
+          <strong>{total}</strong>
         </div>
       </footer>
     </div>
   </>
   )
-}
-function handleRemoveProduct(id: any): void {
-  throw new Error("Function not implemented.");
-}
-
-function handleProductIncrement(product: any): void {
-  throw new Error("Function not implemented.");
 }
 
