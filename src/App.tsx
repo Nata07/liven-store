@@ -55,11 +55,7 @@ export function App() {
   }, {} as CartItemsAmount)
 
   return (
-    <>
-    <Header />
-
     <ul className={styles.u}>
-
       {products.map(product => (
         <li key={product.id}>
           <figure>
@@ -86,6 +82,5 @@ export function App() {
         </li>
       ))}
     </ul>
-    </>
   )
 }
