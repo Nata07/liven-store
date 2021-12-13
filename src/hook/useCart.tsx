@@ -13,11 +13,6 @@ interface Product {
   amount: number;
 }
 
-interface Stock {
-  id: number;
-  amount: number;
-}
-
 interface CartProviderProps {
   children: ReactNode;
 }
@@ -114,9 +109,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         throw new Error('Quantidade inválida')
       }
 
-      const { data: productStock } = await api.get<Stock>(`/${productId}`)
+      const { data: productStock } = await api.get<Product>(`/${productId}`)
 
-      if (productStock.amount <= 1) {
+      if (productStock.stock <= 1) {
         console.log('Quantidade solicitada fora de estoque');
         return
       }
