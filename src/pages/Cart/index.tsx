@@ -3,6 +3,7 @@ import { MdAddCircleOutline, MdDelete, MdRemoveCircleOutline, MdRemoveShoppingCa
 import { Link } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { useCart } from "../../hook/useCart";
+import { formatPrice } from "../../utils/format";
 
 interface Product {
   id: number;
@@ -18,11 +19,6 @@ import styles from './styles.module.scss';
 
 
 export function Cart() {
-
-  const { format: formatPrice } = new Intl.NumberFormat('pt-br', {
-    style: 'currency',
-    currency: 'BRL',
-  });
 
   const { cart, removeProduct, updateProductAmount } = useCart();
 
