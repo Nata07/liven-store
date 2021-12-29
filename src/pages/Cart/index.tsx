@@ -1,22 +1,10 @@
-import { MdAddCircleOutline, MdDelete, MdRemoveCircleOutline, MdRemoveShoppingCart } from "react-icons/md";
+import { MdRemoveShoppingCart } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CartItem } from "../../components/CartItem";
 import { useCart } from "../../hook/useCart";
 import { formatPrice } from "../../utils/format";
 
-interface Product {
-  id: number;
-  createdAt: string;
-  name:  string;
-  price: number;
-  image: string;
-  stock: number;
-  loading: boolean;
-  amount: number;
-}
-
 import styles from './styles.module.scss';
-
 
 export function Cart() {
 
