@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdRemoveCircleOutline, MdRemoveShoppingCart } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { Header } from "../../components/Header";
+import { CartItem } from "../../components/CartItem";
 import { useCart } from "../../hook/useCart";
 import { formatPrice } from "../../utils/format";
 
@@ -12,6 +11,7 @@ interface Product {
   price: number;
   image: string;
   stock: number;
+  loading: boolean;
   amount: number;
 }
 
@@ -20,7 +20,7 @@ import styles from './styles.module.scss';
 
 export function Cart() {
 
-  const { cart, removeProduct, updateProductAmount } = useCart();
+  const { cart } = useCart();
 
   const cartFormatted = cart.map(product => ({
     ...product,
@@ -36,18 +36,6 @@ export function Cart() {
         return sumTotal;
       }, 0)
     )
-
-    function handleRemoveProduct(productId: number) {
-      removeProduct(productId)
-    }
-     function handleProductIncrement(product: Product) {
-    updateProductAmount({productId: product.id, amount: product.amount + 1})
-  }
-
-  function handleProductDecrement(product: Product) {
-    updateProductAmount({productId: product.id, amount: product.amount - 1})
-  }
-
   
   
   return (
@@ -75,52 +63,7 @@ export function Cart() {
             </thead>
             <tbody>
               {cartFormatted.map(product => (
-                <tr key={product.id} data-testid="product">
-                  <td>
-                    <img src={product.image} alt="Tênis de Caminhada Leve Confortável" />
-                  </td>
-                  <td>
-                    <strong>{product.name}</strong>
-                    <span>{product.price}</span>
-                  </td>
-                  <td>
-                    <div>
-                      <button
-                        type="button"
-                        data-testid="decrement-product"
-                      disabled={product.stock <= 1}
-                      onClick={() => handleProductDecrement(product)}
-                      >
-                        <MdRemoveCircleOutline size={20} />
-                      </button>
-                      <input
-                        type="text"
-                        data-testid="product-amount"
-                        readOnly
-                        value={product.amount}
-                      />
-                      <button
-                        type="button"
-                        data-testid="increment-product"
-                      onClick={() => handleProductIncrement(product)}
-                      >
-                        <MdAddCircleOutline size={20} />
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <strong>{product.price}</strong>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      data-testid="remove-product"
-                    onClick={() => handleRemoveProduct(product.id)}
-                    >
-                      <MdDelete size={20} />
-                    </button>
-                  </td>
-                </tr>
+                <CartItem product={product} />
               ))}
             </tbody>
           </table>
